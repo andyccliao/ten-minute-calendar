@@ -6,8 +6,10 @@ const cols = 12;
 
 function Square(props) {
   return (
-    <button className="square" onClick={props.onClick}>
-      {props.value}
+    <button 
+    className="square" 
+    onClick={props.onClick} 
+    style={{"background-color" : (props.value) ? props.value : "white"}}>
     </button>
   );
 }
@@ -66,8 +68,22 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      grid: Array(144).fill(null)
+      grid: Array(144).fill(null),
+      mainColor: "red",
     }
+  }
+
+  onClick(i) {
+    // Can probably short-circuit if the Square clicked is the same color.
+    if(this.state.grid[i] === this.state.mainColor){
+      return;
+    }
+    const grid = this.state.grid;
+
+    grid[i] = this.state.mainColor;
+    this.setState({
+      grid: grid
+    });
   }
 
   render() { 
@@ -76,6 +92,7 @@ class App extends React.Component {
         <div className="Grid">
           <Grid
             grid={this.state.grid}
+            onClick={(i) => this.onClick(i)}
           />
         </div>
       </div>
