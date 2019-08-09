@@ -4,21 +4,34 @@ import './App.css';
 const rows = 12;
 const cols = 12;
 
-function Square(props) {
-  return (
+class Square extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    if(this.props.value !== nextProps.value) {
+      return true;
+    }
+    return false;
+  }
+
+  render() {
+    return (
     <button 
-    className="square" 
-    onClick={props.onClick} 
-    style={{"background-color" : (props.value) ? props.value : "white"}}>
-    </button>
-  );
+      className="square" 
+      onMouseEnter={this.props.onMouseEnter} 
+      onMouseDown={this.props.onMouseDown}
+      onMouseUp={this.props.onMouseUp}
+      style={{"background-color" : (this.props.value) ? this.props.value : "white"}}>
+      </button>
+    );
+  }
 }
 
 class Grid extends React.Component {
   renderSquare(i) {
     return <Square 
       value={this.props.grid[i]} 
-      onClick={() => this.props.onClick(i)}
+      onMouseEnter={() => this.props.onMouseEnter(i)}
+      onMouseDown={() => this.props.onMouseDown(i)}
+      onMouseUp={this.props.onMouseUp}
     />;
   }
 
@@ -64,18 +77,34 @@ class Grid extends React.Component {
   }
 }
 
+class ColorMenu extends React.Component {
+  render() {
+    return (
+      <ul>
+        <li></li>
+      </ul>
+    )
+  }
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       grid: Array(144).fill(null),
       mainColor: "red",
+      colorMenu: [],
     }
+    this.painting = false;
   }
 
-  onClick(i) {
+  onMouseEnter(i) {
     // Can probably short-circuit if the Square clicked is the same color.
-    if(this.state.grid[i] === this.state.mainColor){
+    // Is implemented by shouldComponentUpdate(nextProps, nextState) in React.Component (in Square)
+    /*if(this.state.grid[i] === this.state.mainColor){
+      return;
+    }*/
+    if(!this.painting) {
       return;
     }
     const grid = this.state.grid;
@@ -86,13 +115,35 @@ class App extends React.Component {
     });
   }
 
+  onMouseDown(i) {
+    this.painting = true;
+
+    const grid = this.state.grid;
+
+    grid[i] = this.state.mainColor;
+    this.setState({
+      grid: grid
+    });
+  }
+
+  onMouseUp() {
+    this.painting = false;
+  }
+
   render() { 
     return (
       <div className="App">
         <div className="Grid">
           <Grid
             grid={this.state.grid}
-            onClick={(i) => this.onClick(i)}
+            onMouseEnter={(i) => this.onMouseEnter(i)}
+            onMouseDown={(i) => this.onMouseDown(i)}
+            onMouseUp={() => this.onMouseUp()}
+          />
+        </div>
+        <div className="ColorMenu">
+          <ColorMenu
+            
           />
         </div>
       </div>
