@@ -47,6 +47,7 @@ class Square extends React.Component {
       onMouseEnter={this.props.onMouseEnter} 
       onMouseDown={this.props.onMouseDown}
       onMouseUp={this.props.onMouseUp}
+      onContextMenu={this.props.onMouseDown}
       title={(this.props.colorlabel) ? this.props.colorlabel.label : "Empty"}
       style={{"backgroundColor" : (this.props.colorlabel) ? this.props.colorlabel.color.value : "white",
               "border" : (this.props.colorlabel) ? "0px" : "1px solid #999",}}>
@@ -132,7 +133,7 @@ class ColorMenu extends React.Component {
       className="colorButton" 
       onClick={() => this.props.onClick(null)}
       >
-        Empty
+        Empty (or right click)
       </button>
     )
   }
@@ -197,20 +198,34 @@ class App extends React.Component {
     }
     const grid = this.state.grid;
 
-    grid[i] = this.state.mainColorLabel;
+    if(event.buttons === 2) {
+      grid[i] = null;
+    } else {
+      grid[i] = this.state.mainColorLabel;
+    }
     this.setState({
       grid: grid
     });
   }
   onMouseDown(i, event) {
-    if(event.button !== 0) {
+    if(event.button === 1) {
       return;
     }
+
+    if(event.button === 2) {
+      event.preventDefault();
+    }
+
     this.painting = true;
 
     const grid = this.state.grid;
 
-    grid[i] = this.state.mainColorLabel;
+    if(event.button === 2) {
+      grid[i] = null;
+    }
+    else {
+      grid[i] = this.state.mainColorLabel;
+    }
     this.setState({
       grid: grid
     });
@@ -221,11 +236,18 @@ class App extends React.Component {
   onClick(colorlabel) {
     this.setState({mainColorLabel: colorlabel});
   }
-  // onMouseEnterApp(event) {
-  //   if(this.painting === true) {
-  //     if(event.buttons === );
-  //   }
-  // }
+  onContextMenu(i, event) {
+    event.preventDefault();
+
+    this.painting = true;
+
+    const grid = this.state.grid;
+
+    grid[i] = null;
+    this.setState({
+      grid: grid
+    });
+  }
 
   render() { 
     return (
