@@ -2,6 +2,9 @@
   text-align: center;
   margin-right: auto;
   margin-left: auto;
+  padding-right: 2.5%;
+  max-width: 1080px;
+  display: flex;
 }
 
 .square {
@@ -17,6 +20,25 @@
   padding: 0;
   text-align: center;
   width: 34px;
+}
+
+.colorButton {
+  border: none;
+  height: 34px;
+  min-width: 34px;
+}
+.colorMenuList {
+  list-style-type: none;
+  padding: 0px;
+}
+
+.Grid {
+  margin-left: auto;
+}
+.ColorMenu {
+  margin-right: auto;
+  text-align: left;
+  padding: 17px;
 }
 
 .App-link {
