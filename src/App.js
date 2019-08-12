@@ -59,8 +59,8 @@ class Grid extends React.Component {
   renderSquare(i) {
     return <Square 
       colorlabel={this.props.grid[i]}
-      onMouseEnter={() => this.props.onMouseEnter(i)}
-      onMouseDown={() => this.props.onMouseDown(i)}
+      onMouseEnter={(event) => this.props.onMouseEnter(i, event)}
+      onMouseDown={(event) => this.props.onMouseDown(i, event)}
       onMouseUp={this.props.onMouseUp}
     />;
   }
@@ -182,13 +182,17 @@ class App extends React.Component {
     this.painting = false;
   }
 
-  onMouseEnter(i) {
+  onMouseEnter(i, event) {
     // Can probably short-circuit if the Square clicked is the same color.
     // Is implemented by shouldComponentUpdate(nextProps, nextState) in React.Component (in Square)
     /*if(this.state.grid[i] === this.state.mainColorLabel){
       return;
     }*/
     if(!this.painting) {
+      return;
+    }
+    if(event.buttons === 0) {
+      this.painting = false;
       return;
     }
     const grid = this.state.grid;
@@ -198,8 +202,10 @@ class App extends React.Component {
       grid: grid
     });
   }
-
-  onMouseDown(i) {
+  onMouseDown(i, event) {
+    if(event.button !== 0) {
+      return;
+    }
     this.painting = true;
 
     const grid = this.state.grid;
@@ -209,22 +215,25 @@ class App extends React.Component {
       grid: grid
     });
   }
-
   onMouseUp() {
     this.painting = false;
   }
-
   onClick(colorlabel) {
     this.setState({mainColorLabel: colorlabel});
   }
+  // onMouseEnterApp(event) {
+  //   if(this.painting === true) {
+  //     if(event.buttons === );
+  //   }
+  // }
 
   render() { 
     return (
       <div className="App">
         <Grid
           grid={this.state.grid}
-          onMouseEnter={(i) => this.onMouseEnter(i)}
-          onMouseDown={(i) => this.onMouseDown(i)}
+          onMouseEnter={(i, event) => this.onMouseEnter(i, event)}
+          onMouseDown={(i, event) => this.onMouseDown(i, event)}
           onMouseUp={() => this.onMouseUp()}
         />
         <ColorMenu
