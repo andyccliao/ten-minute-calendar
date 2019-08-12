@@ -48,7 +48,8 @@ class Square extends React.Component {
       onMouseDown={this.props.onMouseDown}
       onMouseUp={this.props.onMouseUp}
       title={(this.props.colorlabel) ? this.props.colorlabel.label : "Empty"}
-      style={{"backgroundColor" : (this.props.colorlabel) ? this.props.colorlabel.color.value : "white"}}>
+      style={{"backgroundColor" : (this.props.colorlabel) ? this.props.colorlabel.color.value : "white",
+              "border" : (this.props.colorlabel) ? "0px" : "1px solid #999",}}>
       </button>
     );
   }
