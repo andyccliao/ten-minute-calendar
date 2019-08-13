@@ -116,6 +116,12 @@ class ColorMenu extends React.Component {
   makeColorItem(colorLabel) {
     return (
       <li key={colorLabel.toString()}>
+        <button
+        className="deleteColor"
+        onClick={() => this.props.onDeleteColorItem(colorLabel)}
+        >
+          X
+        </button>
         <button 
         className="colorButton" 
         style={{"backgroundColor" : colorLabel.color.value}}
@@ -248,6 +254,20 @@ class App extends React.Component {
       grid: grid
     });
   }
+  onDeleteColorItem(colorlabel) {
+    if(!window.confirm("Delete '" + colorlabel.label + "'?")) {
+      return;
+    }
+    let index = this.state.colorList.indexOf(colorlabel);
+    const list = this.state.colorList.slice(0, index).concat(this.state.colorList.slice(index+1));
+    // Also, remove color from grid
+    const grid = this.state.grid.map((cl) => {if(cl === colorlabel){return null;} else {return cl}})
+    if(index !== -1) {
+      // Also, remove as mainColorLabel
+      this.setState({colorList: list, mainColorLabel: list[0], grid: grid});
+    }
+
+  }
 
   render() { 
     return (
@@ -261,6 +281,7 @@ class App extends React.Component {
         <ColorMenu
           colorList={this.state.colorList}
           onClick={(colorlabel) => this.onClick(colorlabel)}
+          onDeleteColorItem={(colorlabel) => this.onDeleteColorItem(colorlabel)}
         />
       </div>
     );
