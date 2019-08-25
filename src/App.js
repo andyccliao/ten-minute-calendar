@@ -75,8 +75,8 @@ const theme = theme => ({
   borderRadius: "0",
   spacing: {
     ...theme.spacing,
-    baseUnit: "1",
-    controlHeight: "34px",
+    baseUnit: "0",
+    controlHeight: "17px",
   }
 });
 
@@ -172,7 +172,7 @@ class Grid extends React.Component {
 }
 
 class ColorMenu extends React.Component {
-  makeColorItem(colorLabel) {
+  makeColorItem(colorLabel, index) {
     return (
       <li key={colorLabel.toString()}>
         <button
@@ -194,6 +194,7 @@ class ColorMenu extends React.Component {
           defaultValue={colorLabel.color}
           isSearchable={false}
           theme={theme}
+          onChange={(value, action) => this.props.onChange(index, value, action)}
         />
       </li>
     );
@@ -201,12 +202,13 @@ class ColorMenu extends React.Component {
 
   makeEraseItem() {
     return (
-      <button 
-      className="colorButton" 
-      onClick={() => this.props.onClick(null)}
-      >
-        Empty (or right click)
-      </button>
+        <li><button 
+        className="colorButton" 
+        onClick={() => this.props.onClick(null)}
+        >
+          Empty (or right click)
+        </button>
+      </li>
     )
   }
 
@@ -214,7 +216,7 @@ class ColorMenu extends React.Component {
     return (
       <ul className="colorMenuList">
         {this.makeEraseItem()}
-        {this.props.colorList.map((cl) => this.makeColorItem(cl))}
+        {this.props.colorList.map((cl, index) => this.makeColorItem(cl, index))}
       </ul>
     );
   }
@@ -254,7 +256,13 @@ class App extends React.Component {
     }
     this.painting = false;
   }
-
+  onChange(i, value, action) {
+    if(action && action.action === "select-option") {
+      const newColorList = this.state.colorList;
+      newColorList[i].color = value;
+      this.setState({colorList: newColorList});
+    }
+  }
   onMouseEnter(i, event) {
     // Can probably short-circuit if the Square clicked is the same color.
     // Is implemented by shouldComponentUpdate(nextProps, nextState) in React.Component (in Square)
@@ -348,6 +356,7 @@ class App extends React.Component {
           colorList={this.state.colorList}
           onClick={(colorlabel) => this.onClick(colorlabel)}
           onDeleteColorItem={(colorlabel) => this.onDeleteColorItem(colorlabel)}
+          onChange={(i, value, action) => this.onChange(i, value, action)}
         />
       </div>
     );

@@ -33,7 +33,7 @@
   padding: 0px;
 }
 .colorMenuList li {
-  align-items: baseline;
+  padding: 1px;
 }
   .deleteColor {
   border: none;
