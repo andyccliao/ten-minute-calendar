@@ -26,19 +26,31 @@
   border: none;
   height: 34px;
   min-width: 34px;
+  display: inline-flex;
 }
 .colorMenuList {
   list-style-type: none;
   padding: 0px;
 }
-.deleteColor {
-  border-left: none;
+.colorMenuList li {
+  align-items: baseline;
+}
+  .deleteColor {
+  border: none;
+  /* border-left: none;
   border-right: none;
   border-top: 1px solid #ffffff;
-  border-bottom: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff; */
   width: 17px;
-  height: 34px;
+  height: 20px;
   padding: 0px;
+}
+.colorSelect {
+  height: 34px;
+  width: 20px;
+}
+.colorOption {
+  background: transparent;
 }
 
 .Grid {
@@ -52,13 +64,4 @@
 
 .App-link {
   color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

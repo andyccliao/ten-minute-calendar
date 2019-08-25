@@ -1,25 +1,84 @@
 import React from 'react';
+import Select from 'react-select';
+import chroma from 'chroma-js';
 import './App.css';
 
 const rows = 12;
 const cols = 12;
 
 const colors = {
-  red:    {value: "#d32f2f", textColor: "white", name: "red"},
-  pink:   {value: "#c2185b", textColor: "white", name: "pink"},
-  violet: {value: "#7b1fa2", textColor: "white", name: "violet"},
-  purple: {value: "#512da8", textColor: "white", name: "purple"},
-  indigo: {value: "#303f9f", textColor: "white", name: "indigo"},
-  blue:   {value: "#1976d2", textColor: "white", name: "blue"},
-  sky:    {value: "#5eb8ff", textColor: "black", name: "sky"},
-  cyan:   {value: "#00acc1", textColor: "black", name: "cyan"},
-  green:  {value: "#43a047", textColor: "black", name: "green"},
-  gold:   {value: "#c0ca33", textColor: "black", name: "gold"},
-  yellow: {value: "#ffeb3b", textColor: "black", name: "yellow"},
-  orange: {value: "#fb8c00", textColor: "black", name: "orange"},
-  brown:  {value: "#6d4c41", textColor: "white", name: "brown"},
-  black:  {value: "#212121", textColor: "white", name: "black"},
+  red:    {value: "#d32f2f", textColor: "white", label: "red"},
+  pink:   {value: "#c2185b", textColor: "white", label: "pink"},
+  violet: {value: "#7b1fa2", textColor: "white", label: "violet"},
+  purple: {value: "#512da8", textColor: "white", label: "purple"},
+  indigo: {value: "#303f9f", textColor: "white", label: "indigo"},
+  blue:   {value: "#1976d2", textColor: "white", label: "blue"},
+  sky:    {value: "#5eb8ff", textColor: "black", label: "sky"},
+  cyan:   {value: "#00acc1", textColor: "black", label: "cyan"},
+  green:  {value: "#43a047", textColor: "black", label: "green"},
+  gold:   {value: "#c0ca33", textColor: "black", label: "gold"},
+  yellow: {value: "#ffeb3b", textColor: "black", label: "yellow"},
+  orange: {value: "#fb8c00", textColor: "black", label: "orange"},
+  brown:  {value: "#6d4c41", textColor: "white", label: "brown"},
+  black:  {value: "#212121", textColor: "white", label: "black"},
 };
+const colorStyles = {
+  control: (styles, state) => {
+    const data = state.getValue();
+    return {
+      ...styles, 
+      backgroundColor: state.hasValue ? data[0].value : 'white',
+      border: "none",
+    }
+  },
+  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+    const color = chroma(data.value);
+    return {
+      ...styles,
+      fontSize: "0.75rem",
+      padding: "0px 5px",
+
+      backgroundColor: isDisabled
+        ? null
+        : isSelected
+        ? data.value
+        : isFocused
+        ? data.value
+        : "white",
+      color: isDisabled
+        ? '#ccc'
+        : isSelected
+        ? data.textColor
+        : isFocused
+        ? data.textColor
+        : data.value,
+      cursor: isDisabled ? 'not-allowed' : 'default',
+      borderRadius: isFocused
+        ? "10px"
+        : null,
+
+      ':active': {
+        ...styles[':active'],
+        backgroundColor: !isDisabled && (isSelected ? data.value : color.alpha(0.3).css()),
+      },
+    };
+  },
+  menu: (styles) => ({ ...styles, minWidth: "3em"}),
+  valueContainer: () => ({width: "0" }),
+  input: styles => ({ ...styles, display: "none"}),
+  placeholder: (styles, state) => ({ ...styles, display: "none" }),
+  singleValue: (styles) => ({ ...styles, display: "none" }),
+  container: (styles) => ({ ...styles, display: "inline-flex", top: "2.2px"}),
+};
+const theme = theme => ({
+  ...theme,
+  borderRadius: "0",
+  spacing: {
+    ...theme.spacing,
+    baseUnit: "1",
+    controlHeight: "34px",
+  }
+});
 
 class ColorLabel {
   constructor(color, label) {
@@ -129,6 +188,13 @@ class ColorMenu extends React.Component {
         >
           <span style={{"color" : colorLabel.color.textColor}}>{colorLabel.label}</span>
         </button>
+        <Select
+          options={Object.values(colors)}
+          styles={colorStyles}
+          defaultValue={colorLabel.color}
+          isSearchable={false}
+          theme={theme}
+        />
       </li>
     );
   }
