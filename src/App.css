@@ -35,7 +35,7 @@
 .colorMenuList li {
   padding: 1px;
 }
-  .deleteColor {
+.deleteColor {
   border: none;
   /* border-left: none;
   border-right: none;
@@ -60,6 +60,23 @@
   margin-right: auto;
   text-align: left;
   padding: 17px;
+}
+.newColorButton {
+  border: none;
+  padding: 10px;
+}
+.fields {
+  height: 0px;
+  overflow: hidden;
+  -webkit-animation-name: fieldAnim; /* Safari 4.0 - 8.0 */
+  -webkit-animation-duration: 0.5s; /* Safari 4.0 - 8.0 */
+  animation-name: fieldAnim;
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+@keyframes fieldAnim {
+  from {height: 0;}
+  to {height: 34px;}
 }
 
 .App-link {

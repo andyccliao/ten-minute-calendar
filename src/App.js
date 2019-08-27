@@ -210,6 +210,42 @@ class Grid extends React.Component {
   }
 }
 
+class AddEventComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {'showFields': false};
+  }
+  onMouseEnter(event) {
+    this.setState({'showFields': true});
+  }
+  onMouseLeave(event) {
+    //ADD CODE SO THAT INPUT WON'T DISAPPEAR WHEN NOT FOCUSED OR MOUSE MOVES AWAY
+    this.setState({'showFields': false});
+  }
+  render() {
+    let fields = null;
+
+    if(this.state.showFields === true) {
+      fields = (
+        <div className="fields">
+          <label>
+            Label: 
+            <input type="text" name="label" />
+          </label>
+        </div>
+      )
+    }
+
+    return (
+    <form onMouseEnter={(e) => this.onMouseEnter(e)} onMouseLeave={(e) => this.onMouseLeave(e)}>
+      {fields}
+      <button className="newColorButton" onClick={this.props.onClickAdd}>
+        Add Event
+      </button>
+    </form>)
+  }
+}
+
 class ColorMenu extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     return this.props.colorList !== nextProps.colorList;
@@ -266,9 +302,9 @@ class ColorMenu extends React.Component {
 
   addNewColor() {
     return (
-      <button className="newColorButton">
-        Add Event
-      </button>
+      <AddEventComponent
+        
+      />
     )
   }
   
@@ -383,6 +419,8 @@ class App extends React.Component {
       // Also, remove as mainColorLabel
       this.setState({colorList: list, mainColorLabel: list[0], grid: grid});
     }
+  }
+  onClickAdd() {
 
   }
 
@@ -400,6 +438,7 @@ class App extends React.Component {
           onClickColor={(colorlabel) => this.onClickColor(colorlabel)}
           onDeleteColorItem={(colorlabel) => this.onDeleteColorItem(colorlabel)}
           onChange={(i, value, action) => this.onChange(i, value, action)}
+          onClickAdd={() => this.onClickAdd()}
         />
       </div>
     );
