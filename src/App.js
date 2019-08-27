@@ -115,33 +115,59 @@ class Square extends React.Component {
   }
 }
 
-class Grid extends React.Component {
-  renderSquare(i) {
+class Row extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    for(let i=0; i < this.props.numCols; i++) {
+      if(this.props.row[i] !== nextProps.row[i]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  renderSquare(i, cl) {
     return <Square 
-      colorlabel={this.props.grid[i]}
+      colorlabel={cl}
       onMouseEnter={(event) => this.props.onMouseEnter(i, event)}
       onMouseDown={(event) => this.props.onMouseDown(i, event)}
       onMouseUp={this.props.onMouseUp}
     />;
   }
 
-  renderRow(m, n) {
-    const row = this.props.grid.slice(m*n, (m+1)*n);
-
+  render() {
+    const m = this.props.rowNum;
+    const n = this.props.numCols;
+    // let res = [];
+    // for (let index=0; index < n; index++) {
+    //   res.push(
+    //     <td key={"data"+ (m*n + index)}>
+    //       {this.renderSquare(m*n + index)}
+    //     </td>
+    //   )
+    // }
+    // Array(n).fill().map( 
+    //   (value, index) => {
+    //     return (<td key={"data"+ (m*n + index)}>
+    //       {this.renderSquare(m*n + index)}
+    //     </td>)
+    //   }
+    // )
     return (
       <tr key={"row:"+(m)}>
         <th key={"rowh:"+m}>{(2*m+5)%12}</th>
-        {row.map( 
+        {this.props.row.map( 
           (value, index) => {
             return (<td key={"data"+ (m*n + index)}>
-              {this.renderSquare(m*n + index)}
+              {this.renderSquare(m*n + index, value)}
             </td>)
           }
         )}
       </tr>
     );
   }
+}
 
+class Grid extends React.Component {
   renderTable() {
     const tbheadrow = (
       <tr>
@@ -151,7 +177,16 @@ class Grid extends React.Component {
 
     let tbrows = [];
     for (let i = 0; i < rows; i++) {
-      tbrows.push(this.renderRow(i, cols));
+      tbrows.push(
+      <Row
+        key={i}
+        rowNum={i} 
+        numCols={cols} 
+        row={this.props.grid.slice(i*cols, (i+1)*cols)}
+        onMouseEnter={this.props.onMouseEnter}
+        onMouseDown={this.props.onMouseDown}
+        onMouseUp={this.props.onMouseUp}
+      />);
     }
 
     return (
@@ -172,6 +207,10 @@ class Grid extends React.Component {
 }
 
 class ColorMenu extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.colorList !== nextProps.colorList;
+  }
+
   makeColorItem(colorLabel, index) {
     return (
       <li key={colorLabel.toString()}>
@@ -184,7 +223,7 @@ class ColorMenu extends React.Component {
         <button 
         className="colorButton" 
         style={{"backgroundColor" : colorLabel.color.value}}
-        onClick={() => this.props.onClick(colorLabel)}
+        onClick={() => this.props.onClickColor(colorLabel)}
         >
           <span style={{"color" : colorLabel.color.textColor}}>{colorLabel.label}</span>
         </button>
@@ -204,7 +243,7 @@ class ColorMenu extends React.Component {
     return (
         <li><button 
         className="colorButton" 
-        onClick={() => this.props.onClick(null)}
+        onClick={() => this.props.onClickColor(null)}
         >
           Empty (or right click)
         </button>
@@ -313,7 +352,7 @@ class App extends React.Component {
   onMouseUp() {
     this.painting = false;
   }
-  onClick(colorlabel) {
+  onClickColor(colorlabel) {
     this.setState({mainColorLabel: colorlabel});
   }
   onContextMenu(i, event) {
@@ -354,7 +393,7 @@ class App extends React.Component {
         />
         <ColorMenu
           colorList={this.state.colorList}
-          onClick={(colorlabel) => this.onClick(colorlabel)}
+          onClickColor={(colorlabel) => this.onClickColor(colorlabel)}
           onDeleteColorItem={(colorlabel) => this.onDeleteColorItem(colorlabel)}
           onChange={(i, value, action) => this.onChange(i, value, action)}
         />
