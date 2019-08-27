@@ -93,7 +93,7 @@ class ColorLabel {
 
 class Square extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
-    if(this.props.colorlabel !== nextProps.value) {
+    if(this.props.colorlabel !== nextProps.colorlabel) {
       return true;
     }
     return false;
@@ -168,6 +168,10 @@ class Row extends React.Component {
 }
 
 class Grid extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.grid !== nextProps.grid;
+  }
+
   renderTable() {
     const tbheadrow = (
       <tr>
@@ -297,7 +301,7 @@ class App extends React.Component {
   }
   onChange(i, value, action) {
     if(action && action.action === "select-option") {
-      const newColorList = this.state.colorList;
+      const newColorList = this.state.colorList.slice();
       newColorList[i].color = value;
       this.setState({colorList: newColorList});
     }
@@ -315,7 +319,7 @@ class App extends React.Component {
       this.painting = false;
       return;
     }
-    const grid = this.state.grid;
+    const grid = this.state.grid.slice();
 
     if(event.buttons === 2) {
       grid[i] = null;
@@ -337,7 +341,7 @@ class App extends React.Component {
 
     this.painting = true;
 
-    const grid = this.state.grid;
+    const grid = this.state.grid.slice();
 
     if(event.button === 2) {
       grid[i] = null;
@@ -360,7 +364,7 @@ class App extends React.Component {
 
     this.painting = true;
 
-    const grid = this.state.grid;
+    const grid = this.state.grid.slice();
 
     grid[i] = null;
     this.setState({
