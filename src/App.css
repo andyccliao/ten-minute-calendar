@@ -2,8 +2,8 @@
   text-align: center;
   margin-right: auto;
   margin-left: auto;
-  padding-right: 2.5%;
-  max-width: 1080px;
+  padding-right: 17px;
+  width: 640px;
   display: flex;
 }
 
@@ -66,17 +66,10 @@
   padding: 10px;
 }
 .fields {
-  height: 0px;
-  overflow: hidden;
-  -webkit-animation-name: fieldAnim; /* Safari 4.0 - 8.0 */
-  -webkit-animation-duration: 0.5s; /* Safari 4.0 - 8.0 */
-  animation-name: fieldAnim;
-  animation-duration: 0.5s;
-  animation-fill-mode: both;
+  width: 100%;
 }
-@keyframes fieldAnim {
-  from {height: 0;}
-  to {height: 34px;}
+#label {
+  margin-left: 0.25em;
 }
 
 .App-link {

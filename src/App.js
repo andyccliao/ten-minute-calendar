@@ -95,6 +95,10 @@ class Square extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     if(this.props.colorlabel !== nextProps.colorlabel) {
       return true;
+    } else if (this.props.colorLabel && nextProps.colorLabel) {
+      if(this.props.colorLabel.color !== nextProps.colorLabel.color) {
+        return true;
+      }
     }
     return false;
   }
@@ -213,36 +217,48 @@ class Grid extends React.Component {
 class AddEventComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {'showFields': false};
+    this.state = {'showFields': false, 'labelValue': ""};
   }
-  onMouseEnter(event) {
+  onClickOpen(event) {
     this.setState({'showFields': true});
   }
-  onMouseLeave(event) {
-    //ADD CODE SO THAT INPUT WON'T DISAPPEAR WHEN NOT FOCUSED OR MOUSE MOVES AWAY
+  onClickCancel(event) {
     this.setState({'showFields': false});
   }
+  onClickAdd(event) {
+    this.props.onClickAdd(event, this.state.labelValue);
+    this.setState({'showFields': false, labelValue: ""});
+  }
+  onChange(event) {
+    this.setState({labelValue: event.target.value});
+  }
+  
   render() {
     let fields = null;
 
-    if(this.state.showFields === true) {
+    if(this.state.showFields) {
       fields = (
-        <div className="fields">
+        <div>
           <label>
             Label: 
-            <input type="text" name="label" />
           </label>
+          <input type="text" name="label" id="label" value={this.state.labelValue} onChange={this.onChange.bind(this)}/>
+          <button onClick={this.onClickAdd.bind(this)}>Add</button>
+          <button onClick={this.onClickCancel.bind(this)}>Cancel</button>
         </div>
+      )
+    } else {
+      fields = (
+        <button className="newColorButton" onClick={() => this.onClickOpen()}>
+          Add Event
+        </button>
       )
     }
 
     return (
-    <form onMouseEnter={(e) => this.onMouseEnter(e)} onMouseLeave={(e) => this.onMouseLeave(e)}>
-      {fields}
-      <button className="newColorButton" onClick={this.props.onClickAdd}>
-        Add Event
-      </button>
-    </form>)
+      <form className="fields">
+        {fields}
+      </form>)
   }
 }
 
@@ -303,7 +319,7 @@ class ColorMenu extends React.Component {
   addNewColor() {
     return (
       <AddEventComponent
-        
+        onClickAdd={this.props.onClickAdd}
       />
     )
   }
@@ -338,8 +354,19 @@ class App extends React.Component {
   onChange(i, value, action) {
     if(action && action.action === "select-option") {
       const newColorList = this.state.colorList.slice();
-      newColorList[i].color = value;
-      this.setState({colorList: newColorList});
+      let setMainColorLabel = newColorList[i] === this.state.mainColorLabel;
+      let oldColorLabel = newColorList[i];
+      let newColorLabel = new ColorLabel(value, newColorList[i].label);
+      //newColorList[i].color = value;
+      newColorList[i] = newColorLabel;
+      
+      const grid = this.state.grid.map((value) => value === oldColorLabel ? newColorLabel : value);
+
+      if(setMainColorLabel) {
+        this.setState({colorList: newColorList, grid: grid, mainColorLabel: newColorList[i]});
+      } else {
+        this.setState({colorList: newColorList, grid: grid});
+      }
     }
   }
   onMouseEnter(i, event) {
@@ -420,8 +447,10 @@ class App extends React.Component {
       this.setState({colorList: list, mainColorLabel: list[0], grid: grid});
     }
   }
-  onClickAdd() {
-
+  onClickAdd(event, label = "") {
+    const list = this.state.colorList.concat([new ColorLabel(colors.red, label)]);
+    this.setState({colorList: list});
+    return;
   }
 
   render() { 
@@ -438,7 +467,7 @@ class App extends React.Component {
           onClickColor={(colorlabel) => this.onClickColor(colorlabel)}
           onDeleteColorItem={(colorlabel) => this.onDeleteColorItem(colorlabel)}
           onChange={(i, value, action) => this.onChange(i, value, action)}
-          onClickAdd={() => this.onClickAdd()}
+          onClickAdd={(event, label) => this.onClickAdd(event, label)}
         />
       </div>
     );
