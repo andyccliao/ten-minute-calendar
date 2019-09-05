@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/ten-minute-calendar/precache-manifest.f6f3aa6fefaee20d9fda9bf02a4e2312.js"
+  "/ten-minute-calendar/precache-manifest.1c7c089a9dfaf6d008273c5e274adcd8.js"
 );
 
 self.addEventListener('message', (event) => {

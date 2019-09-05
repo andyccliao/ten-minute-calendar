@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/ten-minute-calendar/static/css/main.5e7624a6.chunk.css",
-    "main.js": "/ten-minute-calendar/static/js/main.40a46199.chunk.js",
-    "main.js.map": "/ten-minute-calendar/static/js/main.40a46199.chunk.js.map",
+    "main.js": "/ten-minute-calendar/static/js/main.3bc16755.chunk.js",
+    "main.js.map": "/ten-minute-calendar/static/js/main.3bc16755.chunk.js.map",
     "runtime~main.js": "/ten-minute-calendar/static/js/runtime~main.fd8463ae.js",
     "runtime~main.js.map": "/ten-minute-calendar/static/js/runtime~main.fd8463ae.js.map",
     "static/js/2.37bf0269.chunk.js": "/ten-minute-calendar/static/js/2.37bf0269.chunk.js",
     "static/js/2.37bf0269.chunk.js.map": "/ten-minute-calendar/static/js/2.37bf0269.chunk.js.map",
     "index.html": "/ten-minute-calendar/index.html",
-    "precache-manifest.f6f3aa6fefaee20d9fda9bf02a4e2312.js": "/ten-minute-calendar/precache-manifest.f6f3aa6fefaee20d9fda9bf02a4e2312.js",
+    "precache-manifest.1c7c089a9dfaf6d008273c5e274adcd8.js": "/ten-minute-calendar/precache-manifest.1c7c089a9dfaf6d008273c5e274adcd8.js",
     "service-worker.js": "/ten-minute-calendar/service-worker.js",
     "static/css/main.5e7624a6.chunk.css.map": "/ten-minute-calendar/static/css/main.5e7624a6.chunk.css.map"
   }

@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "97f7745ce5305f82a68517d31a053dc5",
+    "revision": "aedba635f199f5081f4ea5bad62b98ac",
     "url": "/ten-minute-calendar/index.html"
   },
   {
-    "revision": "bfe20155448fb7c48876",
+    "revision": "7f7e8a7cef3464708e99",
     "url": "/ten-minute-calendar/static/css/main.5e7624a6.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/ten-minute-calendar/static/js/2.37bf0269.chunk.js"
   },
   {
-    "revision": "bfe20155448fb7c48876",
-    "url": "/ten-minute-calendar/static/js/main.40a46199.chunk.js"
+    "revision": "7f7e8a7cef3464708e99",
+    "url": "/ten-minute-calendar/static/js/main.3bc16755.chunk.js"
   },
   {
     "revision": "c3868a003f9f9e310aca",
