@@ -22,54 +22,58 @@ const colors = {
   brown:  {value: "#6d4c41", textColor: "white", label: "brown"},
   black:  {value: "#212121", textColor: "white", label: "black"},
 };
-const colorStyles = {
-  control: (styles, state) => {
-    const data = state.getValue();
-    return {
-      ...styles, 
-      backgroundColor: state.hasValue ? data[0].value : 'white',
-      border: "none",
-    }
-  },
-  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-    const color = chroma(data.value);
-    return {
-      ...styles,
-      fontSize: "0.75rem",
-      padding: "0px 5px",
 
-      backgroundColor: isDisabled
-        ? null
-        : isSelected
-        ? data.value
-        : isFocused
-        ? data.value
-        : "white",
-      color: isDisabled
-        ? '#ccc'
-        : isSelected
-        ? data.textColor
-        : isFocused
-        ? data.textColor
-        : data.value,
-      cursor: isDisabled ? 'not-allowed' : 'default',
-      borderRadius: isFocused
-        ? "10px"
-        : null,
+function colorStyles(colorLabel=null, mainColorLabel=null) {
+  return {
+    control: (styles, state) => {
+      const data = state.getValue();
+      return {
+        ...styles, 
+        backgroundColor: state.hasValue ? data[0].value : 'white',
+        border: "none",
+        boxShadow : (colorLabel === mainColorLabel && colorLabel) ? "0px 0px 1px 1px ".concat(colorLabel.color.value) : null,
+      }
+    },
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+      const color = chroma(data.value);
+      return {
+        ...styles,
+        fontSize: "0.75rem",
+        padding: "0px 5px",
 
-      ':active': {
-        ...styles[':active'],
-        backgroundColor: !isDisabled && (isSelected ? data.value : color.alpha(0.3).css()),
-      },
-    };
-  },
-  menu: (styles) => ({ ...styles, minWidth: "3em"}),
-  valueContainer: () => ({width: "0" }),
-  input: styles => ({ ...styles, display: "none"}),
-  placeholder: (styles, state) => ({ ...styles, display: "none" }),
-  singleValue: (styles) => ({ ...styles, display: "none" }),
-  container: (styles) => ({ ...styles, display: "inline-flex", top: "2.2px"}),
-};
+        backgroundColor: isDisabled
+          ? null
+          : isSelected
+          ? data.value
+          : isFocused
+          ? data.value
+          : "white",
+        color: isDisabled
+          ? '#ccc'
+          : isSelected
+          ? data.textColor
+          : isFocused
+          ? data.textColor
+          : data.value,
+        cursor: isDisabled ? 'not-allowed' : 'default',
+        borderRadius: isFocused
+          ? "10px"
+          : null,
+
+        ':active': {
+          ...styles[':active'],
+          backgroundColor: !isDisabled && (isSelected ? data.value : color.alpha(0.3).css()),
+        },
+      };
+    },
+    menu: (styles) => ({ ...styles, minWidth: "3em"}),
+    valueContainer: () => ({width: "0" }),
+    input: styles => ({ ...styles, display: "none"}),
+    placeholder: (styles) => ({ ...styles, display: "none" }),
+    singleValue: (styles) => ({ ...styles, display: "none" }),
+    container: (styles) => ({ ...styles, display: "inline-flex", top: "2.2px"}),
+  };
+}
 const theme = theme => ({
   ...theme,
   borderRadius: "0",
@@ -261,35 +265,67 @@ class AddEventComponent extends React.Component {
       </form>)
   }
 }
+class SelectComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.lastUpdated = false;
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    if(nextProps.mainColorLabel === nextProps.colorLabel) {
+      this.lastUpdated = true;
+      return true;
+    }
+    return this.lastUpdated;
+  }
+
+  render() {
+    if(this.props.mainColorLabel !== this.props.colorLabel) {
+      this.lastUpdated = false;
+    }
+    return <Select
+      options={this.props.options}
+      styles={colorStyles(this.props.colorLabel, this.props.mainColorLabel)}
+      value={this.props.value}
+      isSearchable={this.props.isSearchable}
+      theme={this.props.theme}
+      onChange={this.props.onChange}
+    />
+  }
+}
 
 class ColorMenu extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
-    return this.props.colorList !== nextProps.colorList;
+    return this.props.colorList !== nextProps.colorList || this.props.mainColorLabel !== nextProps.mainColorLabel;
   }
 
-  makeColorItem(colorLabel, index) {
+  makeColorItem(colorLabel, index, mainColorLabel) {
     return (
       <li key={colorLabel.toString()}>
         <button
         className="deleteColor"
         onClick={() => this.props.onDeleteColorItem(colorLabel)}
+        style={{"boxShadow" : (colorLabel === mainColorLabel) ? "0px 0px 1px 1px ".concat(colorLabel.color.value) : null,}}
         >
           X
         </button>
         <button 
         className="colorButton" 
-        style={{"backgroundColor" : colorLabel.color.value}}
+        style={{
+          "backgroundColor" : colorLabel.color.value, 
+          "boxShadow" : (colorLabel === mainColorLabel) ? "0px 0px 1px 1px ".concat(colorLabel.color.value) : null,
+        }}
         onClick={() => this.props.onClickColor(colorLabel)}
         >
           <span style={{"color" : colorLabel.color.textColor}}>{colorLabel.label}</span>
         </button>
-        <Select
-          options={Object.values(colors)}
-          styles={colorStyles}
-          defaultValue={colorLabel.color}
-          isSearchable={false}
-          theme={theme}
-          onChange={(value, action) => this.props.onChange(index, value, action)}
+        <SelectComponent
+        options={Object.values(colors)}
+        colorLabel={colorLabel}
+        mainColorLabel={mainColorLabel}
+        value={colorLabel.color}
+        isSearchable={false}
+        theme={theme}
+        onChange={(value, action) => this.props.onChange(index, value, action)}
         />
       </li>
     );
@@ -311,7 +347,7 @@ class ColorMenu extends React.Component {
     return (
       <ul className="colorMenuList">
         {this.makeEraseItem()}
-        {this.props.colorList.map((cl, index) => this.makeColorItem(cl, index))}
+        {this.props.colorList.map((cl, index) => this.makeColorItem(cl, index, this.props.mainColorLabel))}
       </ul>
     );
   }
@@ -354,7 +390,7 @@ class App extends React.Component {
   onChange(i, value, action) {
     if(action && action.action === "select-option") {
       const newColorList = this.state.colorList.slice();
-      let setMainColorLabel = newColorList[i] === this.state.mainColorLabel;
+      //let setMainColorLabel = newColorList[i] === this.state.mainColorLabel;
       let oldColorLabel = newColorList[i];
       let newColorLabel = new ColorLabel(value, newColorList[i].label);
       //newColorList[i].color = value;
@@ -362,11 +398,12 @@ class App extends React.Component {
       
       const grid = this.state.grid.map((value) => value === oldColorLabel ? newColorLabel : value);
 
-      if(setMainColorLabel) {
-        this.setState({colorList: newColorList, grid: grid, mainColorLabel: newColorList[i]});
-      } else {
-        this.setState({colorList: newColorList, grid: grid});
-      }
+      this.setState({colorList: newColorList, grid: grid, mainColorLabel: newColorList[i]});
+      // if(setMainColorLabel) {
+      //   this.setState({colorList: newColorList, grid: grid, mainColorLabel: newColorList[i]});
+      // } else {
+      //   this.setState({colorList: newColorList, grid: grid});
+      // }
     }
   }
   onMouseEnter(i, event) {
@@ -468,6 +505,7 @@ class App extends React.Component {
           onDeleteColorItem={(colorlabel) => this.onDeleteColorItem(colorlabel)}
           onChange={(i, value, action) => this.onChange(i, value, action)}
           onClickAdd={(event, label) => this.onClickAdd(event, label)}
+          mainColorLabel={this.state.mainColorLabel}
         />
       </div>
     );
