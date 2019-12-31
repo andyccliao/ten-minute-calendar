@@ -71,7 +71,7 @@ function colorStyles(colorLabel=null, mainColorLabel=null) {
     input: styles => ({ ...styles, display: "none"}),
     placeholder: (styles) => ({ ...styles, display: "none" }),
     singleValue: (styles) => ({ ...styles, display: "none" }),
-    container: (styles) => ({ ...styles, display: "inline-flex", top: "2.2px"}),
+    container: (styles) => ({ ...styles, display: "inline-block", top: "2.2px"}),
   };
 }
 const theme = theme => ({
@@ -183,7 +183,9 @@ class Grid extends React.Component {
   renderTable() {
     const tbheadrow = (
       <tr>
-        <th/><th/><th/><th/><th/><th/><th/><th>|</th><th/><th/><th/><th/><th/>
+        <th/><th/><th/><th/><th/><th/>
+        <th/><th style={{height: "1em", borderLeft: "2px solid black"}}/>
+        <th/><th/><th/><th/><th/>
       </tr>
     );
 

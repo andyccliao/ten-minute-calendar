@@ -30,7 +30,9 @@ button:focus {
   border: none;
   height: 34px;
   min-width: 34px;
-  display: inline-flex;
+  width: auto;
+  display: inline-block;
+  margin: 0;
 }
 .colorMenuList {
   list-style-type: none;
@@ -38,6 +40,7 @@ button:focus {
 }
 .colorMenuList li {
   padding: 1px;
+  max-width: 200px;
 }
 .deleteColor {
   border: none;
