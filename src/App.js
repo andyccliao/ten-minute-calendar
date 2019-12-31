@@ -111,9 +111,9 @@ class Square extends React.Component {
     return (
     <button 
       className="square" 
-      onMouseEnter={this.props.onMouseEnter} 
-      onMouseDown={this.props.onMouseDown}
-      onMouseUp={this.props.onMouseUp}
+      onPointerEnter={this.props.onMouseEnter} 
+      onPointerDown={this.props.onMouseDown}
+      onPointerUp={this.props.onMouseUp}
       onContextMenu={this.props.onMouseDown}
       title={(this.props.colorlabel) ? this.props.colorlabel.label : "Empty"}
       style={{"backgroundColor" : (this.props.colorlabel) ? this.props.colorlabel.color.value : "white",
