@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-import chroma from 'chroma-js';
+//import chroma from 'chroma-js';
 import './App.css';
 
 const rows = 12;
@@ -23,6 +23,9 @@ const colors = {
   black:  {value: "#212121", textColor: "white", label: "black"},
 };
 
+
+/*** React Select Prop-setting Callbacks ***/
+// Helper function that returns an object full of react-select callbacks.
 function colorStyles(colorLabel=null, mainColorLabel=null) {
   return {
     control: (styles, state) => {
@@ -35,20 +38,22 @@ function colorStyles(colorLabel=null, mainColorLabel=null) {
       }
     },
     option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-      const color = chroma(data.value);
+      //const transparent = chroma(data.value).alpha(0.3).css();
       return {
         ...styles,
         fontSize: "0.75rem",
         padding: "0px 5px",
 
-        backgroundColor: isDisabled
+        backgroundColor: 
+          isDisabled
           ? null
           : isSelected
           ? data.value
           : isFocused
           ? data.value
           : "white",
-        color: isDisabled
+        color: 
+          isDisabled
           ? '#ccc'
           : isSelected
           ? data.textColor
@@ -60,10 +65,10 @@ function colorStyles(colorLabel=null, mainColorLabel=null) {
           ? "10px"
           : null,
 
-        ':active': {
+        /*':active': {
           ...styles[':active'],
-          backgroundColor: !isDisabled && (isSelected ? data.value : color.alpha(0.3).css()),
-        },
+          backgroundColor: color.alpha(0.3).css(),/*!isDisabled && (isSelected ? data.value : color.alpha(0.3).css()), * /
+        },*/
       };
     },
     menu: (styles) => ({ ...styles, minWidth: "3em"}),
@@ -74,7 +79,8 @@ function colorStyles(colorLabel=null, mainColorLabel=null) {
     container: (styles) => ({ ...styles, display: "inline-block", top: "2.2px"}),
   };
 }
-const theme = theme => ({
+
+const rsTheme = theme => ({
   ...theme,
   borderRadius: "0",
   spacing: {
@@ -83,6 +89,8 @@ const theme = theme => ({
     controlHeight: "17px",
   }
 });
+/*** End React Select Prop-setting Callbacks ***/
+
 
 class ColorLabel {
   constructor(color, label) {
@@ -94,6 +102,7 @@ class ColorLabel {
     return this.color + this.label;
   }
 }
+
 
 class Square extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -326,7 +335,7 @@ class ColorMenu extends React.Component {
         mainColorLabel={mainColorLabel}
         value={colorLabel.color}
         isSearchable={false}
-        theme={theme}
+        theme={rsTheme}
         onChange={(value, action) => this.props.onChange(index, value, action)}
         />
       </li>
