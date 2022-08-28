@@ -193,7 +193,7 @@ class Grid extends React.Component {
     const tbheadrow = (
       <tr>
         <th/><th/><th/><th/><th/><th/>
-        <th/><th style={{height: "1em", borderLeft: "2px solid black"}}/>
+        <th/><th style={{height: "1em", borderLeft: "2px solid black"}}>+1</th>
         <th/><th/><th/><th/><th/>
       </tr>
     );

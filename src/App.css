@@ -24,6 +24,16 @@ button:focus {
   padding: 0;
   text-align: center;
   width: 34px;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  -webkit-transition-duration: 0.1s;
+  transition-duration: 0.1s;
+  -webkit-transition-property: transform;
+  transition-property: transform;
+}
+.square:hover, .square:focus, .square:active {
+  -webkit-transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 .colorButton {
