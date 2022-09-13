@@ -1,5 +1,6 @@
 ## Ten Minute Calendar
 
+See it in action here!: [https://andyccliao.github.io/ten-minute-calendar/](https://andyccliao.github.io/ten-minute-calendar/)
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
